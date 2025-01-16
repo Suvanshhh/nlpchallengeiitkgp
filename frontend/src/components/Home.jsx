@@ -1,17 +1,10 @@
-import { useNavigate } from "react-router-dom";
-import {
-  FaRobot,
-  FaCode,
-  FaLock,
-  FaGithub,
-  FaLightbulb,
-  FaBrain,
-} from "react-icons/fa";
+import React from "react";
+import Navigation from "./Navigation"; // Import Navigation component
 import { motion } from "framer-motion";
+import { FaRobot, FaGithub } from "react-icons/fa";
+import { FaBrain, FaLightbulb, FaLock } from "react-icons/fa";
 
 function Home() {
-  const navigate = useNavigate();
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -35,12 +28,8 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
-      </div>
+      {/* Navigation Bar */}
+      <Navigation />
 
       <div className="container mx-auto px-4 py-16 relative z-10">
         <motion.div
@@ -66,7 +55,7 @@ function Home() {
             variants={itemVariants}
             className="text-3xl font-semibold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text"
           >
-            Your AI-Powered Developer Assistant
+            Your AI-Powered Customer Support ChatBot
           </motion.h6>
 
           <motion.p
@@ -81,7 +70,7 @@ function Home() {
             variants={itemVariants}
             className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed"
           >
-            Developed With ❤️ by Suvansh.
+            Developed With ❤️ by KRS.
           </motion.p>
 
           <motion.div
@@ -89,7 +78,7 @@ function Home() {
             className="flex justify-center gap-6 flex-wrap"
           >
             <button
-              onClick={() => navigate("/auth")}
+              onClick={() => window.location.href = "/chat"} // Update to window.location.href instead of navigate()
               className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700
                        text-white rounded-xl font-semibold text-lg flex items-center gap-3 transform hover:-translate-y-1
                        transition-all duration-200 shadow-lg hover:shadow-2xl"
@@ -99,7 +88,7 @@ function Home() {
               <span className="inline-block animate-bounce">→</span>
             </button>
             <a
-              href="https://github.com/Suvanshhh/Vartalaap.AI_"
+              href="https://github.com/Suvanshhh/nlpchallengeiitkgp"
               target="_blank"
               rel="noopener noreferrer"
               className="px-8 py-4 bg-gray-800/50 hover:bg-gray-800/70 backdrop-blur-lg
@@ -137,19 +126,6 @@ function Home() {
             gradient="from-pink-500 to-pink-700"
           />
         </motion.div>
-
-        {/* Stats Section */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8"
-        >
-          <StatCard number="100+" label="Programming Languages" />
-          <StatCard number="24/7" label="AI Availability" />
-          <StatCard number="1M+" label="Developers" />
-          <StatCard number="5⭐" label="Average Rating" />
-        </motion.div>
       </div>
     </div>
   );
@@ -170,20 +146,6 @@ function FeatureCard({ icon, title, description, gradient }) {
       </div>
       <h3 className="text-white text-xl font-semibold mt-6 mb-4">{title}</h3>
       <p className="text-gray-400 leading-relaxed">{description}</p>
-    </motion.div>
-  );
-}
-
-function StatCard({ number, label }) {
-  return (
-    <motion.div
-      whileHover={{ scale: 1.05 }}
-      className="text-center p-6 bg-gray-800/40 backdrop-blur-lg rounded-2xl border border-gray-700/50"
-    >
-      <div className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text mb-2">
-        {number}
-      </div>
-      <div className="text-gray-400 text-sm">{label}</div>
     </motion.div>
   );
 }
