@@ -4,8 +4,8 @@ transformers==4.33.3
 nltk==3.9.0
 keras-nlp==0.5.2
 keras==2.14.0
-tensorflow==2.14.0
-torch==2.0.1
-torchvision==0.15.2
+tensorflow
+torch
+torchvision
 scipy==1.11.1
 numpy==1.25.0
