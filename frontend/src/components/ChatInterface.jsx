@@ -104,7 +104,15 @@ function XChatInterface() {
     // Show welcome message when the component is mounted
     const welcomeMessage = {
       role: "ai",
-      text: "Welcome to Vartalaap.AI! I am your User Assistant chatbot, here to assist you with various domains like medical, banking, and e-commerce. I can also help in multiple languages. How can I assist you today?",
+      text: `
+      🌟 Welcome to Vartalaap.AI! 🌟  
+      I'm your User Assistant 🤖, here to help with various domains such as:
+      - Medical 🏥
+      - Banking 💳
+      - E-commerce 🛒
+      - And I can assist you in multiple languages 🌍!  
+      How can I assist you today? Feel free to ask anything! 😊
+    `,
     };
     setMessages([welcomeMessage]);
     setIsWelcomeMessageVisible(false); // Hide welcome message after it’s shown
