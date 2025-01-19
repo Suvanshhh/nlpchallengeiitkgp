@@ -62,8 +62,7 @@ function Home() {
             variants={itemVariants}
             className="text-xl text-gray-300 mb-9 max-w-2xl mx-auto leading-relaxed"
           >
-            Your intelligent programming companion that understands your code,
-            solves problems, and helps you build better software.
+            An AI-powered Customer service chatbot system that understands your needs and provides seamless assistance.
           </motion.p>
 
           <motion.p

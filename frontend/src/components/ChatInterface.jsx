@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -7,6 +7,7 @@ function XChatInterface() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [sourceLang, setSourceLang] = useState("en"); // Language state
+  const [isWelcomeMessageVisible, setIsWelcomeMessageVisible] = useState(true);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -99,6 +100,16 @@ function XChatInterface() {
     </ReactMarkdown>
   );
 
+  useEffect(() => {
+    // Show welcome message when the component is mounted
+    const welcomeMessage = {
+      role: "ai",
+      text: "Welcome to Vartalaap.AI! I am your User Assistant chatbot, here to assist you with various domains like medical, banking, and e-commerce. I can also help in multiple languages. How can I assist you today?",
+    };
+    setMessages([welcomeMessage]);
+    setIsWelcomeMessageVisible(false); // Hide welcome message after it’s shown
+  }, []);
+
   return (
     <div className="flex flex-col h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Header */}
@@ -116,16 +127,16 @@ function XChatInterface() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2-2 0 01-2-2V6a2 2-2 2h14a2 2-2 2h-5l-5 5v-5z"
+                  d="M12 16c4.418 0 8-3.582 8-8S16.418 0 12 0 4 3.582 4 8s3.582 8 8 8zM12 6v6m0 0v6m0-6h6m-6 0H6"
                 />
               </svg>
             </div>
             <div>
               <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-                XChat Interface
+                Vartalaap.AI
               </h1>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Powered by your imagination
+                Powered by your imagination, for you assistance.
               </p>
             </div>
           </div>
@@ -137,9 +148,7 @@ function XChatInterface() {
         {messages.map((message, index) => (
           <div
             key={index}
-            className={`flex ${
-              message.role === "user" ? "justify-end" : "justify-start"
-            }`}
+            className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
           >
             <div
               className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-5 py-4 shadow-lg ${
@@ -175,7 +184,7 @@ function XChatInterface() {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your message..."
+            placeholder="Type your query here..."
             className="flex-1 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
           />
           <button
