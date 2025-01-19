@@ -6,6 +6,7 @@ import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 function XChatInterface() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [sourceLang, setSourceLang] = useState("en"); // Language state
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -22,17 +23,34 @@ function XChatInterface() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: input }),
+        body: JSON.stringify({ message: input, language: sourceLang }), // Send language to backend
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        const aiResponse = {
-          role: "ai",
-          text: data.message, // AI's response
-        };
-        setMessages((prev) => [...prev, aiResponse]);
+        if (data.escalate) {
+          // Handle escalation
+          await fetch("http://127.0.0.1:5000/api/escalate", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ message: input, user: "user@example.com" }), // Replace with dynamic user email
+          });
+
+          const escalationMessage = {
+            role: "ai",
+            text: "Your query has been escalated to a human agent. They will get back to you shortly.",
+          };
+          setMessages((prev) => [...prev, escalationMessage]);
+        } else {
+          const aiResponse = {
+            role: "ai",
+            text: data.message, // Translated AI response
+          };
+          setMessages((prev) => [...prev, aiResponse]);
+        }
       } else {
         const aiResponse = {
           role: "ai",
@@ -67,7 +85,10 @@ function XChatInterface() {
               {String(children).replace(/\n$/, "")}
             </SyntaxHighlighter>
           ) : (
-            <code className="bg-gray-100 dark:bg-gray-800 rounded px-1.5 py-0.5 text-sm font-mono" {...props}>
+            <code
+              className="bg-gray-100 dark:bg-gray-800 rounded px-1.5 py-0.5 text-sm font-mono"
+              {...props}
+            >
               {children}
             </code>
           );
@@ -95,7 +116,7 @@ function XChatInterface() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2-2 0 01-2-2V6a2 2-2 2h14a2 2-2 2h-5l-5 5v-5z"
                 />
               </svg>
             </div>
@@ -116,13 +137,15 @@ function XChatInterface() {
         {messages.map((message, index) => (
           <div
             key={index}
-            className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+            className={`flex ${
+              message.role === "user" ? "justify-end" : "justify-start"
+            }`}
           >
             <div
               className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-5 py-4 shadow-lg ${
                 message.role === "user"
                   ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white ml-4"
-                  : "bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-100 dark:border-gray-700/50 text-white mr-4" // updated for white text
+                  : "bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-100 dark:border-gray-700/50 text-white mr-4"
               }`}
             >
               <MessageContent text={message.text} />
@@ -137,6 +160,17 @@ function XChatInterface() {
         className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-t border-gray-200/50 dark:border-gray-700/50 px-4 py-4"
       >
         <div className="flex items-center space-x-3">
+          <select
+            value={sourceLang}
+            onChange={(e) => setSourceLang(e.target.value)}
+            className="bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg px-4 py-2"
+          >
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="zh-cn">Chinese</option>
+          </select>
           <input
             type="text"
             value={input}
